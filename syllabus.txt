@@ -151,7 +151,8 @@ Typical preparation time: **3–4 hours per week**.
 ### Midterm Exam (20%)
 - Week 7, Friday evening (7:30–9pm)  
 - Closed-book eLearn quiz with Lockdown Browser  
-- Allowed: one double-sided A4 cheatsheet  
+- Allowed: one double-sided A4 cheatsheet (any form, printed or handwritten)
+- Rough paper will be provided by invigilators (no need to bring your own).
 - Bring non-programmable calculator  
 - Scope: content up to Week 5 (Stacks/Queues)  
 
