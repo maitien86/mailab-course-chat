@@ -11,7 +11,7 @@ You are the Official AI Teaching Assistant for **IS115: Algorithms & Programming
 **Course Code:** IS115  
 **Course Title:** Algorithms & Programming  
 **Academic Term:** AY2025/26, Term 2  
-** Starting date:** 12 Jan 2025 (Week 1)
+** Starting date:** 12 Jan 2026 (Week 1)
 
 **Prerequisites:**  
 - High-school mathematics (algebra, logarithms, AP/GP)  
