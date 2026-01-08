@@ -1,71 +1,85 @@
 import streamlit as st
 import google.generativeai as genai
 
-# 1. Securely fetch the API Key from Streamlit Secrets
+# 1. API Configuration
+# Ensure you have GEMINI_API_KEY in your Streamlit Cloud Secrets
 try:
-    api_key = st.secrets["GEMINI_API_KEY"]
-    genai.configure(api_key=api_key)
-except KeyError:
-    st.error("API Key not found. Please add GEMINI_API_KEY to Streamlit Secrets.")
+    API_KEY = st.secrets["GEMINI_API_KEY"]
+    genai.configure(api_key=API_KEY)
+except Exception:
+    st.error("Missing API Key. Please add 'GEMINI_API_KEY' to your Streamlit Secrets.")
     st.stop()
 
-# 2. Define the Bot's Persona (Customize this for your course!)
-COURSE_NAME = "Reinforcement Learning & Human Behavior" # Example
-SYSTEM_PROMPT = f"""
-You are the official AI Teaching Assistant for the course: {COURSE_NAME}.
-Your goal is to help students understand course concepts, assignments, and schedules.
-
-Guidelines:
-- If a student asks about Lab research, refer to 'MaiLab' at SMU.
-- Be encouraging and academic in tone.
-- If you are unsure about a specific administrative detail (like a deadline change), 
-  advise the student to check the official syllabus or email the Professor.
-- Do not answer questions completely unrelated to the course or computer science.
+# 2. System Instructions (Your "Syllabus")
+SYSTEM_PROMPT = """
+You are a helpful Teaching Assistant for [Insert Course Name]. 
+- Use the following syllabus rules: [Insert Deadlines/Grading here].
+- Provide hints rather than direct answers for coding/math problems.
+- If a question is outside the course scope, politely redirect the student.
+- Important: Always be professional and encouraging.
 """
 
-# 3. Initialize the Gemini Model
+# 3. Model Initialization
+# Using 1.5-flash for the best balance of speed and free-tier limits
 model = genai.GenerativeModel(
-    model_name="gemini-2.5-flash", # Use Flash for speed and higher free limits
+    model_name="gemini-1.5-flash",
     system_instruction=SYSTEM_PROMPT
 )
 
-# 4. Streamlit UI Setup
-st.set_page_config(page_title="MaiLab Course Bot", page_icon="🤖")
-st.title("📚 MaiLab Course Assistant")
-st.caption(f"Ask me anything about {COURSE_NAME}")
+# 4. Streamlit UI
+st.set_page_config(page_title="Course AI Assistant", page_icon="🎓")
+st.title("🎓 Course Chatbot")
 
-# Initialize chat history in the browser session
+# Sidebar for controls
+with st.sidebar:
+    st.header("Settings")
+    if st.button("Clear Conversation"):
+        st.session_state.messages = []
+        st.rerun()
+
+# Initialize session state for messages
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
-# Display previous chat messages
+# Display chat history from session state
 for message in st.session_state.messages:
     with st.chat_message(message["role"]):
         st.markdown(message["content"])
 
 # 5. Chat Logic
-if prompt := st.chat_input("How can I help you today?"):
-    # Add user message to history
+if prompt := st.chat_input("Ask a question about the course..."):
+    # Display user message
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user"):
         st.markdown(prompt)
 
-    # Generate response from Gemini
+    # Generate response
     with st.chat_message("assistant"):
-        message_placeholder = st.empty()
-        
-        # Prepare history for Gemini (filtering for correct format)
-        history = [
-            {"role": m["role"], "parts": [m["content"]]} 
-            for m in st.session_state.messages[:-1]
-        ]
-        
-        # Start chat and send the new message
-        chat_session = model.start_chat(history=history)
-        response = chat_session.send_message(prompt)
-        
-        full_response = response.text
-        message_placeholder.markdown(full_response)
-    
-    # Add assistant response to history
-    st.session_state.messages.append({"role": "assistant", "content": full_response})
+        try:
+            # FIX: Format history correctly for Gemini
+            # Streamlit uses "assistant", Gemini REQUIRES "model"
+            formatted_history = []
+            for m in st.session_state.messages[:-1]:
+                role = "model" if m["role"] == "assistant" else "user"
+                formatted_history.append({"role": role, "parts": [m["content"]]})
+
+            # Start chat session with historical context
+            chat = model.start_chat(history=formatted_history)
+            
+            # Request response (streaming for a better UI feel)
+            response = chat.send_message(prompt, stream=True)
+            
+            # Stream the text to the UI
+            full_response = ""
+            placeholder = st.empty()
+            for chunk in response:
+                full_response += chunk.text
+                placeholder.markdown(full_response + "▌")
+            placeholder.markdown(full_response)
+            
+            # Save assistant response to history
+            st.session_state.messages.append({"role": "assistant", "content": full_response})
+
+        except Exception as e:
+            st.error(f"An error occurred: {str(e)}")
+            st.info("Try clicking 'Clear Conversation' in the sidebar to reset the history.")
