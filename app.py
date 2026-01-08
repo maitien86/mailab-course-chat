@@ -22,7 +22,7 @@ You are a helpful Teaching Assistant for [Insert Course Name].
 # 3. Model Initialization
 # Using 1.5-flash for the best balance of speed and free-tier limits
 model = genai.GenerativeModel(
-    model_name="gemini-1.5-flash",
+    model_name="gemini-2.5-flash",
     system_instruction=SYSTEM_PROMPT
 )
 
