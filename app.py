@@ -1,31 +1,64 @@
 import streamlit as st
 import google.generativeai as genai
 from datetime import datetime
+import os
+from PyPDF2 import PdfReader
+from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain_community.vectorstores import FAISS
+from langchain_google_genai import GoogleGenerativeAIEmbeddings
 
-# --- 1. SETTINGS & ACADEMIC CALENDAR ---
+# --- 1. SETTINGS ---
 MODEL_NAME = "gemini-2.5-flash-lite"
-TERM_START_DATE = datetime(2026, 1, 5)  # Term 2 Start: Monday, Jan 5, 2026
+TERM_START_DATE = datetime(2026, 1, 5)
 
-# --- 2. CONFIGURATION & SYLLABUS LOADING ---
+# --- 2. CONFIGURATION & RAG LOGIC ---
 st.set_page_config(page_title="IS115 Assistant", page_icon="🎓", layout="wide")
 
 try:
     API_KEY = st.secrets["GEMINI_API_KEY"]
     genai.configure(api_key=API_KEY)
 except Exception:
-    st.error("Missing GEMINI_API_KEY in Streamlit Secrets.")
+    st.error("Missing GEMINI_API_KEY in Secrets.")
     st.stop()
 
+# Helper: Extract text from PDFs in a folder
+def get_pdf_text():
+    text = ""
+    pdf_folder = "data/" # Place your PDF files (e.g., Week1.pdf) here
+    if not os.path.exists(pdf_folder):
+        return ""
+    for filename in os.listdir(pdf_folder):
+        if filename.endswith(".pdf"):
+            pdf_reader = PdfReader(os.path.join(pdf_folder, filename))
+            for page in pdf_reader.pages:
+                text += page.extract_text()
+    return text
+
+# Helper: Create Vector Store
+@st.cache_resource
+def create_vector_store():
+    raw_text = get_pdf_text()
+    if not raw_text:
+        return None
+    
+    text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=100)
+    chunks = text_splitter.split_text(raw_text)
+    
+    embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001", google_api_key=API_KEY)
+    vector_store = FAISS.from_texts(chunks, embedding=embeddings)
+    return vector_store
+
+# Initialize RAG
+vector_db = create_vector_store()
+
+# Load syllabus for system context
 def load_syllabus():
     try:
         with open("syllabus.txt", "r", encoding="utf-8") as f:
-            content = f.read()
-            version = content.split('\n')[0].replace('###', '').strip()
-            return content, version
-    except FileNotFoundError:
-        return "You are an assistant for IS115.", "v0.0"
+            return f.read()
+    except: return "Assistant for IS115."
 
-SYLLABUS_CONTENT, VERSION_ID = load_syllabus()
+SYLLABUS = load_syllabus()
 model = genai.GenerativeModel(model_name=MODEL_NAME, system_instruction=SYLLABUS_CONTENT)
 
 # --- 3. FORCEFUL UI STYLING (BLACK BACKGROUND / WHITE TEXT) ---
