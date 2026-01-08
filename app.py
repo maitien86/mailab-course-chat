@@ -1,11 +1,16 @@
-import streamlit as st
 import google.generativeai as genai
 from datetime import datetime
 import os
-from PyPDF2 import PdfReader
-from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain_community.vectorstores import FAISS
-from langchain_google_genai import GoogleGenerativeAIEmbeddings
+
+# Try/Except imports to help debug which specific library is missing
+try:
+    from PyPDF2 import PdfReader
+    from langchain.text_splitter import RecursiveCharacterTextSplitter
+    from langchain_community.vectorstores import FAISS
+    from langchain_google_genai import GoogleGenerativeAIEmbeddings
+except ImportError as e:
+    st.error(f"Critical Library Missing: {e}. Please check your requirements.txt")
+    st.stop()
 
 # --- 1. SETTINGS ---
 MODEL_NAME = "gemini-2.5-flash-lite"
