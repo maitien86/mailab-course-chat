@@ -97,8 +97,11 @@ By the end of this course, students will be able to:
 
 ## 4. Course Pedagogy
 This course adopts a **flipped classroom model** from Week 2 onward. Students are expected to:
-- Watch assigned video lectures before class  
+- Watch assigned video lectures before class
 - Complete self-check quizzes before each lesson  
+- Attempt Tier 1 and Tier 2 questions (provided in the previous week’s class).
+- Attempting Tier 3 questions will earn bonus class participation points.
+- Using genAI is allowed, but keep in mind that we have closed-book midterm and final exams
 
 Typical preparation time: **3–4 hours per week**.
 
@@ -162,7 +165,7 @@ Typical preparation time: **3–4 hours per week**.
 ### Group Project (20%)
 - From Fri of Week 11 to Fri of Week 13
 - Groups of 2 students (3 students if the number of student in the section is odd)
-- there will be 2 or three coding questions, score will evaluated based on solution quality and run time. Students also need to submit reports and recorded video to explain their solutions
+- there will be 2 or three coding questions, score will evaluated based on solution quality and run time. Students also need to submit reports and recorded video to explain their solutions (more detailed will be provided later)
 ---
 
 ## 7. Required & Recommended Materials
