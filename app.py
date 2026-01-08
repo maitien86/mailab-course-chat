@@ -32,6 +32,15 @@ except Exception:
 def get_pdf_text():
     text = ""
     pdf_folder = "data/" # Place your PDF files (e.g., Week1.pdf) here
+    
+    # DEBUG: See what's actually there
+    if os.path.exists(pdf_folder):
+        all_files = os.listdir(pdf_folder)
+        st.sidebar.write(f"Files found: {all_files}")
+    else:
+        st.sidebar.error("CRITICAL: The folder '/data' does not exist at the root!")
+        return ""
+        
     if not os.path.exists(pdf_folder):
         return ""
     for filename in os.listdir(pdf_folder):
