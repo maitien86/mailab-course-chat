@@ -1,16 +1,17 @@
-import streamlit as st  # MUST BE FIRST
+import streamlit as st
 import google.generativeai as genai
 from datetime import datetime
 import os
 
-# Try/Except imports to help debug which specific library is missing
+# --- 1. ROBUST IMPORTS ---
 try:
     from PyPDF2 import PdfReader
-    from langchain.text_splitter import RecursiveCharacterTextSplitter
+    # New import path for 2026 stability
+    from langchain_text_splitters import RecursiveCharacterTextSplitter 
     from langchain_community.vectorstores import FAISS
     from langchain_google_genai import GoogleGenerativeAIEmbeddings
 except ImportError as e:
-    st.error(f"Critical Library Missing: {e}. Please check your requirements.txt")
+    st.error(f"⚠️ Library Missing: {e}. Please ensure your requirements.txt is correct and reboot the app.")
     st.stop()
 
 # --- 1. SETTINGS ---
