@@ -227,6 +227,8 @@ The following university-scheduled make-up classes apply for public holidays dur
 | Hari Raya Puasa          | Saturday, 21 March 2026  | Nil                          | Nil                         |
 | Good Friday               | Friday, 3 April 2026     | All Classes                  | Saturday, 28 March 2026     |
 
+**Note:** Make-up classes will be conducted at the same time and venue, or online if the class collectively prefers an online session.
+
 ## 11. Labs Overview (5 Labs): Links & Deadlines
 There are 5 labs (coding exercises) for students to attempt. Following are links and deadlines
 
