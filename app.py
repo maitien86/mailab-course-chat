@@ -50,6 +50,31 @@ def get_pdf_text():
                 text += page.extract_text()
     return text
 
+# --- 3. RAG CORE LOGIC ---
+def process_text_to_vectors(raw_text):
+    if not raw_text or len(raw_text.strip()) < 50:
+        return None
+    try:
+        text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=100)
+        chunks = text_splitter.split_text(raw_text)
+        embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001", google_api_key=API_KEY)
+        return FAISS.from_texts(chunks, embedding=embeddings)
+    except Exception as e:
+        st.error(f"Vector Error: {e}")
+        return None
+
+def get_github_pdf_text():
+    text = ""
+    folder = "data/"
+    if os.path.exists(folder):
+        files = [f for f in os.listdir(folder) if f.endswith(".pdf")]
+        for f in files:
+            try:
+                reader = PdfReader(os.path.join(folder, f))
+                for page in reader.pages:
+                    text += page.extract_text() or ""
+            except: pass
+    return text
 # Helper: Create Vector Store
 @st.cache_resource
 def create_vector_store():
@@ -173,6 +198,8 @@ with st.sidebar:
     st.subheader(f"📅 Week {current_week} of 13")
     st.progress(progress_val / 100)
 
+    combined_text = get_github_pdf_text()
+    vector_db = process_text_to_vectors(combined_text)
     if vector_db:
         st.success("📚 Knowledge Base: Active")
     else:
