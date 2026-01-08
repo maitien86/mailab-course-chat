@@ -5,14 +5,14 @@ import google.generativeai as genai
 MODEL_NAME = "gemini-2.5-flash-lite"
 
 # --- 2. CONFIGURATION & SYLLABUS LOADING ---
-st.set_page_config(page_title="IS115 Assistant", page_icon="💻", layout="wide")
+st.set_page_config(page_title="IS115 Assistant", page_icon="🎓", layout="wide")
 
-# Securely fetch API Key from Streamlit Secrets
+# Securely fetch API Key
 try:
     API_KEY = st.secrets["GEMINI_API_KEY"]
     genai.configure(api_key=API_KEY)
 except Exception:
-    st.error("Missing GEMINI_API_KEY. Please add it to Streamlit Secrets.")
+    st.error("Missing GEMINI_API_KEY in Streamlit Secrets.")
     st.stop()
 
 # Load syllabus.txt and version ID
@@ -20,7 +20,6 @@ def load_syllabus():
     try:
         with open("syllabus.txt", "r", encoding="utf-8") as f:
             content = f.read()
-            # Extract first line for versioning
             version = content.split('\n')[0].replace('###', '').strip()
             return content, version
     except FileNotFoundError:
@@ -34,24 +33,41 @@ model = genai.GenerativeModel(
     system_instruction=SYLLABUS_CONTENT
 )
 
-# --- 3. CUSTOM UI STYLING (REMOVED BACKGROUND IMAGE) ---
+# --- 3. UI STYLING (SMU THEME & DARK TEXT) ---
 def add_custom_style():
     st.markdown(
         """
         <style>
-        /* Transparent chat bubbles for clean look */
-        .stChatMessage {
-            background-color: rgba(240, 242, 246, 0.8);
-            border-radius: 12px;
-            border: 1px solid #ddd;
+        /* Main App Background */
+        .stApp {
+            background-color: #F0F2F6;
         }
-        /* SMU Deep Blue Sidebar */
+        
+        /* Sidebar Styling (SMU Deep Blue) */
         [data-testid="stSidebar"] {
             background-color: #002349;
             color: white;
         }
-        .stMetric {
-            color: #ffffff !important;
+
+        /* Chat Bubbles Styling */
+        [data-testid="stChatMessage"] {
+            background-color: #FFFFFF;
+            border: 1px solid #D1D5DB;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        /* Force Dark Text for Readability */
+        [data-testid="stChatMessageContent"] p {
+            color: #111827 !important;
+            font-size: 1.05rem;
+            font-weight: 450;
+        }
+
+        /* Header Text Shadow */
+        .main-header {
+            color: #002349;
+            font-weight: 800;
         }
         </style>
         """,
@@ -60,8 +76,7 @@ def add_custom_style():
 
 add_custom_style()
 
-# --- 4. SIDEBAR & REQUEST COUNTER ---
-# Initialize request count in session state
+# --- 4. SIDEBAR & LOGOS ---
 if "request_count" not in st.session_state:
     st.session_state.request_count = 0
 
@@ -69,26 +84,35 @@ if "messages" not in st.session_state:
     st.session_state.messages = []
 
 with st.sidebar:
-    st.title("MaiLab Portal")
-    # Using a professional coding icon/image instead of background
-    st.image("https://images.unsplash.com/photo-1516116216624-53e697fedbea?auto=format&fit=crop&w=400&q=80")
-    st.info("**IS115: Algorithms & Programming**\n\nSections G1, G2, G3, G4")
-    
-    # NEW: Request Counter Metric
-    st.metric("Total Student Questions", st.session_state.request_count)
+    # SMU LOGO - Using official SMU colors/branding
+    st.image("https://upload.wikimedia.org/wikipedia/en/thumb/f/f6/Singapore_Management_University_logo.svg/1200px-Singapore_Management_University_logo.svg.png", width=200)
     
     st.markdown("---")
-    st.write("**Instructor:** Prof. Mai Anh Tien")
-    st.write(f"**Syllabus Version:** {VERSION_ID}")
+    st.header("Admin Dashboard")
+    st.metric("Total Questions Asked", st.session_state.request_count)
     
-    if st.button("Clear Conversation"):
+    st.info(f"**Course:** IS115 Algorithms & Programming\n\n**Sections:** G1, G2, G3, G4")
+    
+    st.markdown("---")
+    st.write(f"**Instructor:** Prof. Mai Anh Tien")
+    st.write(f"**Version:** {VERSION_ID}")
+    
+    if st.button("Reset Session"):
         st.session_state.messages = []
         st.session_state.request_count = 0
         st.rerun()
 
 # --- 5. CHAT INTERFACE ---
-st.title("🤖 IS115 AI Teaching Assistant")
-st.warning("🚀 **BETA VERSION**: For technical issues, contact Prof. Mai Anh Tien (@Tienmai).")
+# Course Branding at the Top
+col1, col2 = st.columns([1, 4])
+with col1:
+    # Course Logo/Icon
+    st.image("https://cdn-icons-png.flaticon.com/512/2103/2103633.png", width=80)
+with col2:
+    st.markdown("<h1 class='main-header'>IS115: Algorithms & Programming</h1>", unsafe_allow_html=True)
+    st.caption("Official AI Teaching Assistant for Sections G1-G4 | Powered by MaiLab")
+
+st.warning("🚀 **BETA NOTICE**: If the bot provides incorrect admin info, refer to the official eLearn syllabus or contact Prof. Mai Anh Tien.")
 
 # Display previous messages
 for msg in st.session_state.messages:
@@ -96,39 +120,26 @@ for msg in st.session_state.messages:
         st.markdown(msg["content"])
 
 # User prompt logic
-if prompt := st.chat_input("Ask about recursion, complexity, or course admin..."):
-    # Increment request counter
+if prompt := st.chat_input("Ask a question about algorithms, data structures, or course policies..."):
     st.session_state.request_count += 1
-    
-    # Add user message to history
     st.session_state.messages.append({"role": "user", "content": prompt})
+    
     with st.chat_message("user"):
         st.markdown(prompt)
 
-    # Response generation
     with st.chat_message("assistant"):
         try:
-            # Properly format history for the Gemini API
+            # Format history for Gemini
             formatted_history = []
             for m in st.session_state.messages[:-1]:
                 role = "model" if m["role"] == "assistant" else "user"
                 formatted_history.append({"role": role, "parts": [m["content"]]})
             
-            # Start the chat session
             chat = model.start_chat(history=formatted_history)
-            
-            # Send message and get response
             response = chat.send_message(prompt)
-            full_res = response.text
             
-            # Display results
-            st.markdown(full_res)
-            
-            # Save assistant response to history
-            st.session_state.messages.append({"role": "assistant", "content": full_res})
+            st.markdown(response.text)
+            st.session_state.messages.append({"role": "assistant", "content": response.text})
 
         except Exception as e:
-            if "429" in str(e):
-                st.error("Rate limit reached. Please wait a moment.")
-            else:
-                st.error(f"Error processing response: {str(e)}")
+            st.error(f"Error: {str(e)}")
