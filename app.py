@@ -106,7 +106,7 @@ with st.sidebar:
     st.image("https://vms.smu.edu.sg/images/Logo/smu-logo.png", width=180)
     
     st.markdown("---")
-    st.subheader("👨‍🏫 Instructor Profile")
+    st.subheader("👨‍🏫 Instructor:")
     st.markdown("""
     **Prof. Mai Anh Tien**  
     *SCIS,* **Singapore Management University**
