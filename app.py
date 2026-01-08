@@ -16,7 +16,7 @@ except ImportError as e:
 
 # --- 1. SETTINGS ---
 MODEL_NAME = "gemini-2.5-flash-lite"
-TERM_START_DATE = datetime(2026, 1, 5)
+TERM_START_DATE = datetime(2026, 1, 12)
 
 # --- 2. CONFIGURATION & RAG LOGIC ---
 st.set_page_config(page_title="IS115 Assistant", page_icon="🎓", layout="wide")
