@@ -224,13 +224,13 @@ The following university-scheduled make-up classes apply for public holidays dur
 ## 11. Labs Overview (5 Labs): Links & Deadlines
 There are 5 labs (coding exercises) for students to attempt. Following are links and deadlines
 
-| Lab | Topic Week | Deadline | Link |
-|-----|------------|----------|------|
-| **Lab 0** | Week 2 (Complexity) | **Fri, Week 2** | https://www.hackerrank.com/is115lab0 |
-| **Lab 1** | Week 3 (Iteration & Decomposition: search/sort) | **Fri, Week 3** | https://www.hackerrank.com/is115lab1 |
-| **Lab 2** | Week 4 (Recursion) | **Fri, Week 4** | https://www.hackerrank.com/is115lab2 |
-| **Lab 3** | Week 5 (Stacks & Queues) | **Fri, Week 5** | https://www.hackerrank.com/is115lab3 |
-| **Lab 4** |    | **Fri, Week 8** | https://www.hackerrank.com/is115lab4 |
+| Lab | Deadline | Link |
+|-----|----------|------|
+| **Lab 0** | **Fri, Week 2** | https://www.hackerrank.com/is115lab0 |
+| **Lab 1** | **Fri, Week 3** | https://www.hackerrank.com/is115lab1 |
+| **Lab 2** | **Fri, Week 4** | https://www.hackerrank.com/is115lab2 |
+| **Lab 3** | **Fri, Week 5** | https://www.hackerrank.com/is115lab3 |
+| **Lab 4** | **Fri, Week 8** | https://www.hackerrank.com/is115lab4 |
 
 **Notes**
 - Each lab is hosted on **HackerRank** via the links above.  
