@@ -37,26 +37,40 @@ Telegram: @Tienmai
 | G3 | Wed | 12:00–3:15pm | SCIS1 SR 2-2 |
 | G4 | Wed | 7:00–10:15pm | SCIS1 SR 2-4 |
 
-### Teaching Assistants & Telegram Groups
+### Sections (Taught by others)
+Section | Day | Time          | Venue                       | Instructor        |
+|---------|-----|----------------|------------------------------|--------------------|
+| G5      | Mon | 8:15–11:30 AM  | SOE/SCIS2 Seminar Room 5-2  | Mok Heng Ngee      |
+| G6      | Mon | 12:00–3:15 PM  | SOE/SCIS2 Seminar Room 5-2  | Mok Heng Ngee      |
+| G7      | Fri | 12:00–3:15 PM  | SOE/SCIS2 Seminar Room 2-1  | Zhang Zhiyuan      |
+
+
+### Telegram Groups
+G1: https://t.me/+cgOOlFBUQ8gwMmU1  
+G2: https://t.me/+57iXg9LF3c02MzJl  
+G3: https://t.me/+kB_msa_gnncxMzI1 
+G4: https://t.me/+ZC3URVF3hDg5NTJl  
+
+### Teaching Assistants 
 - **G1 TA:** Joel Khoo  
   Email: joel.khoo.2024@computing.smu.edu.sg  
   Telegram: @koeljhoo  
-  Group: https://t.me/+cgOOlFBUQ8gwMmU1  
+ 
 
 - **G2 TA:** Joseph Chew  
   Email: joseph.chew.2024@computing.smu.edu.sg  
   Telegram: @joch00  
-  Group: https://t.me/+57iXg9LF3c02MzJl  
+  
 
 - **G3 TA:** Sambrama Huang  
   Email: sy.huang.2024@computing.smu.edu.sg  
   Telegram: @samhuang0  
-  Group: https://t.me/+kB_msa_gnncxMzI1  
+
 
 - **G4 TA:** Rodney Wang  
   Email: rodney.wang.2024@computing.smu.edu.sg  
   Telegram: @rodnvy_w  
-  Group: https://t.me/+ZC3URVF3hDg5NTJl  
+
 
 ---
 
@@ -129,8 +143,15 @@ Typical preparation time: **3–4 hours per week**.
 
 ### Final Exam (40%)
 - Covers all course topics  
+- There might be questions covering group-project's questions
 - Format follows the Midterm  
+- On 21/04/2026 (TUE), from 8:30AM 1o 10:30AM
+- Location: to be announced later
 
+### Group Project (20%)
+- From Fri of Week 11 to Fri of Week 13
+- Groups of 2 students (3 students if the number of student in the section is odd)
+- there will be 2 or three coding questions, score will evaluated based on solution quality and run time. Students also need to submit reports and recorded video to explain their solutions
 ---
 
 ## 7. Required & Recommended Materials
@@ -148,8 +169,9 @@ Typical preparation time: **3–4 hours per week**.
 ## 8. Policies & Expectations
 
 ### Attendance & Punctuality
-- Late by **15 minutes = absence**  
+- Late by **15 minutes = absence**  (unless valid reasons provided)
 - 3 unexcused absences may result in failing the course  
+- Students may attend another section if they have a valid reason. In such cases, they must email the instructors to obtain approval.
 
 ### Communication Policy
 - Maintain a respectful, non-toxic communication environment  
