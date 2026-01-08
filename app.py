@@ -1,85 +1,73 @@
 import streamlit as st
 import google.generativeai as genai
 
-# 1. API Configuration
-# Ensure you have GEMINI_API_KEY in your Streamlit Cloud Secrets
+# 1. Configuration & Model Setup
 try:
     API_KEY = st.secrets["GEMINI_API_KEY"]
     genai.configure(api_key=API_KEY)
 except Exception:
-    st.error("Missing API Key. Please add 'GEMINI_API_KEY' to your Streamlit Secrets.")
+    st.error("Missing GEMINI_API_KEY in Streamlit Secrets.")
     st.stop()
 
-# 2. System Instructions (Your "Syllabus")
-SYSTEM_PROMPT = """
-You are a helpful Teaching Assistant for [Insert Course Name]. 
-- Use the following syllabus rules: [Insert Deadlines/Grading here].
-- Provide hints rather than direct answers for coding/math problems.
-- If a question is outside the course scope, politely redirect the student.
-- Important: Always be professional and encouraging.
-"""
+# Function to load syllabus and extract version
+def get_syllabus_data():
+    try:
+        with open("syllabus.txt", "r", encoding="utf-8") as f:
+            content = f.read()
+            # Find the first line for the version number
+            version = content.split('\n')[0].replace('###', '').strip()
+            return content, version
+    except FileNotFoundError:
+        return "You are a helpful TA for IS115.", "v0.0"
 
-# 3. Model Initialization
-# Using 1.5-flash for the best balance of speed and free-tier limits
+SYLLABUS_TEXT, VERSION_ID = get_syllabus_data()
+
+# Initialize Gemini 2.5 Flash
 model = genai.GenerativeModel(
     model_name="gemini-2.5-flash",
-    system_instruction=SYSTEM_PROMPT
+    system_instruction=SYLLABUS_TEXT
 )
 
-# 4. Streamlit UI
-st.set_page_config(page_title="Course AI Assistant", page_icon="🎓")
-st.title("🎓 Course Chatbot")
+# 2. UI Layout
+st.set_page_config(page_title="IS115 Course Bot", page_icon="💻")
+st.title("💻 IS115: Algorithms & Programming")
+st.caption(f"Powered by Gemini 2.5 Flash | {VERSION_ID}")
 
-# Sidebar for controls
 with st.sidebar:
-    st.header("Settings")
-    if st.button("Clear Conversation"):
+    st.header("Course Resources")
+    st.info(f"Current Syllabus: {VERSION_ID}")
+    if st.button("Clear Chat"):
         st.session_state.messages = []
         st.rerun()
+    st.markdown("---")
+    st.markdown("**Note:** Bot uses LockDown Browser rules for exams.")
 
-# Initialize session state for messages
+# 3. Chat Logic
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
-# Display chat history from session state
-for message in st.session_state.messages:
-    with st.chat_message(message["role"]):
-        st.markdown(message["content"])
+for msg in st.session_state.messages:
+    with st.chat_message(msg["role"]):
+        st.markdown(msg["content"])
 
-# 5. Chat Logic
-if prompt := st.chat_input("Ask a question about the course..."):
-    # Display user message
+if prompt := st.chat_input("Ask about recursion, stacks, or course admin..."):
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user"):
         st.markdown(prompt)
 
-    # Generate response
     with st.chat_message("assistant"):
-        try:
-            # FIX: Format history correctly for Gemini
-            # Streamlit uses "assistant", Gemini REQUIRES "model"
-            formatted_history = []
-            for m in st.session_state.messages[:-1]:
-                role = "model" if m["role"] == "assistant" else "user"
-                formatted_history.append({"role": role, "parts": [m["content"]]})
-
-            # Start chat session with historical context
-            chat = model.start_chat(history=formatted_history)
-            
-            # Request response (streaming for a better UI feel)
-            response = chat.send_message(prompt, stream=True)
-            
-            # Stream the text to the UI
-            full_response = ""
-            placeholder = st.empty()
-            for chunk in response:
-                full_response += chunk.text
-                placeholder.markdown(full_response + "▌")
-            placeholder.markdown(full_response)
-            
-            # Save assistant response to history
-            st.session_state.messages.append({"role": "assistant", "content": full_response})
-
-        except Exception as e:
-            st.error(f"An error occurred: {str(e)}")
-            st.info("Try clicking 'Clear Conversation' in the sidebar to reset the history.")
+        # Format history: convert 'assistant' to 'model' for the API
+        history = [{"role": "model" if m["role"] == "assistant" else "user", 
+                    "parts": [m["content"]]} for m in st.session_state.messages[:-1]]
+        
+        chat = model.start_chat(history=history)
+        response = chat.send_message(prompt, stream=True)
+        
+        full_res = ""
+        holder = st.empty()
+        for chunk in response:
+            full_res += chunk.text
+            holder.markdown(full_res + "▌")
+        holder.markdown(full_res)
+        
+    st.session_state.messages.append({"role": "assistant", "content": full_res})
