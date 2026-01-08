@@ -30,8 +30,8 @@ model = genai.GenerativeModel(
 
 # 2. UI Layout
 st.set_page_config(page_title="IS115 Course Bot", page_icon="💻")
-st.title("💻 IS115: Algorithms & Programming")
-st.caption(f"Powered by Gemini 2.5 Flash | {VERSION_ID}")
+st.title("💻 IS115: Algorithms & Programming - Q&A")
+st.caption(f"Sections G1, G2, G3 and G4 (by Prof. Mai Anh Tien) ")
 
 with st.sidebar:
     st.header("Course Resources")
@@ -39,8 +39,6 @@ with st.sidebar:
     if st.button("Clear Chat"):
         st.session_state.messages = []
         st.rerun()
-    st.markdown("---")
-    st.markdown("**Note:** Bot uses LockDown Browser rules for exams.")
 
 # 3. Chat Logic
 if "messages" not in st.session_state:
@@ -50,7 +48,7 @@ for msg in st.session_state.messages:
     with st.chat_message(msg["role"]):
         st.markdown(msg["content"])
 
-if prompt := st.chat_input("Ask about recursion, stacks, or course admin..."):
+if prompt := st.chat_input("Ask course admin or course materials..."):
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user"):
         st.markdown(prompt)
