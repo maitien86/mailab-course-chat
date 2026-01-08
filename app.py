@@ -1,3 +1,4 @@
+import streamlit as st  # MUST BE FIRST
 import google.generativeai as genai
 from datetime import datetime
 import os
