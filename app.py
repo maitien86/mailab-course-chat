@@ -103,17 +103,17 @@ current_week, progress_val = get_course_progress()
 
 with st.sidebar:
     # SMU Branding
-    st.image("https://upload.wikimedia.org/wikipedia/en/thumb/f/f6/Singapore_Management_University_logo.svg/1200px-Singapore_Management_University_logo.svg.png", width=180)
+    st.image("https://vms.smu.edu.sg/images/Logo/smu-logo.png", width=180)
     
     st.markdown("---")
     st.subheader("👨‍🏫 Instructor Profile")
     st.markdown("""
-    **Prof. Mai Anh Tien** Assistant Professor of Computer Science  
+    **Prof. Mai Anh Tien** Assistant Professor of Information Systems  
     *School of Computing and Information Systems* **Singapore Management University**
     
-    **Research:** Reinforcement Learning, Decision-making, and Human Behavior Modeling.  
-    **Lab:** [MaiLab](https://tienmai.com)  
-    **Contact:** [atmai@smu.edu.sg](mailto:atmai@smu.edu.sg)
+     
+    **Email:** [atmai@smu.edu.sg](mailto:atmai@smu.edu.sg)
+    **Telegram:** @Tienmai
     """)
     
     st.markdown("---")
@@ -122,7 +122,7 @@ with st.sidebar:
     st.progress(progress_val / 100)
     
     st.markdown("---")
-    st.metric("Total Questions", st.session_state.request_count)
+    st.metric("Total Questions Asked", st.session_state.request_count)
     st.write(f"Syllabus Version: {VERSION_ID}")
     
     if st.button("Reset Chat"):
@@ -138,7 +138,7 @@ with col2:
     st.markdown("<h1 class='main-header'>IS115: Algorithms & Programming</h1>", unsafe_allow_html=True)
 
 # Beta Version Notice
-st.info("🚀 **BETA VERSION:** This is an experimental AI Teaching Assistant powered by MaiLab. Please verify critical exam or project dates with the official eLearn portal.")
+st.info("🚀 **BETA VERSION:** This is an experimental AI Teaching Assistant. If you encounter any issues, please contact Prof. Mai Anh Tien or your section TA.")
 
 # Display History
 for msg in st.session_state.messages:
