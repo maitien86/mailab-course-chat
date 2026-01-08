@@ -66,7 +66,7 @@ def load_syllabus():
     except: return "Assistant for IS115."
 
 SYLLABUS = load_syllabus()
-model = genai.GenerativeModel(model_name=MODEL_NAME, system_instruction=SYLLABUS_CONTENT)
+model = genai.GenerativeModel(model_name=MODEL_NAME, system_instruction=SYLLABUS)
 
 # --- 3. FORCEFUL UI STYLING (BLACK BACKGROUND / WHITE TEXT) ---
 def add_custom_style():
