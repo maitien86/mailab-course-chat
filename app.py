@@ -1,5 +1,6 @@
 import streamlit as st
 import google.generativeai as genai
+import time
 
 # 1. Configuration & Model Setup
 try:
@@ -24,7 +25,7 @@ SYLLABUS_TEXT, VERSION_ID = get_syllabus_data()
 
 # Initialize Gemini 2.5 Flash
 model = genai.GenerativeModel(
-    model_name="gemini-2.5-flash",
+    model_name="gemini-2.5-flash-lite",
     system_instruction=SYLLABUS_TEXT
 )
 
@@ -47,7 +48,15 @@ if "messages" not in st.session_state:
 for msg in st.session_state.messages:
     with st.chat_message(msg["role"]):
         st.markdown(msg["content"])
-
+try:
+    # Attempt to send the message
+    response = chat.send_message(prompt, stream=True)
+except Exception as e:
+    if "429" in str(e):
+        st.warning("Too many requests! Waiting 10 seconds to retry...")
+        time.sleep(10)  # Wait before retrying
+        response = chat.send_message(prompt, stream=True)
+        
 if prompt := st.chat_input("Ask course admin or course materials..."):
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user"):
