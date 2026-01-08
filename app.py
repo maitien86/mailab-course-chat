@@ -2,56 +2,62 @@ import streamlit as st
 import google.generativeai as genai
 import time
 
-# 1. Configuration & Model Setup
+# --- 1. SETTINGS & PRICING (2026 PAID TIER) ---
+COST_PER_1M_INPUT = 0.10  # USD
+COST_PER_1M_OUTPUT = 0.40 # USD
+MODEL_NAME = "gemini-2.5-flash-lite" #
+
+# --- 2. CONFIGURATION & SYLLABUS LOADING ---
+st.set_page_config(page_title="IS115 Assistant", page_icon="💻", layout="wide")
+
+# Securely fetch API Key
 try:
     API_KEY = st.secrets["GEMINI_API_KEY"]
     genai.configure(api_key=API_KEY)
 except Exception:
-    st.error("Missing GEMINI_API_KEY in Streamlit Secrets.")
+    st.error("Missing GEMINI_API_KEY. Please add it to Streamlit Secrets.")
     st.stop()
 
-# Function to load syllabus and extract version
-def get_syllabus_data():
+# Load syllabus.txt and version ID
+def load_syllabus():
     try:
         with open("syllabus.txt", "r", encoding="utf-8") as f:
             content = f.read()
-            # Find the first line for the version number
+            # Extract first line for versioning
             version = content.split('\n')[0].replace('###', '').strip()
             return content, version
     except FileNotFoundError:
-        return "You are a helpful TA for IS115.", "v0.0"
+        return "You are an assistant for IS115.", "v0.0"
 
-SYLLABUS_TEXT, VERSION_ID = get_syllabus_data()
+SYLLABUS_CONTENT, VERSION_ID = load_syllabus()
 
-# Initialize Gemini 2.5 Flash
+# Initialize Model
 model = genai.GenerativeModel(
-    model_name="gemini-2.5-flash-lite",
-    system_instruction=SYLLABUS_TEXT
+    model_name=MODEL_NAME,
+    system_instruction=SYLLABUS_CONTENT
 )
 
-# 2. UI Layout
-# --- UI CONFIGURATION ---
-st.set_page_config(page_title="IS115 Assistant", page_icon="💻", layout="wide")
-
-# Custom CSS for a professional background and styling
+# --- 3. CUSTOM UI STYLING (SMU/MAILAB THEME) ---
 def add_custom_style():
     st.markdown(
         """
         <style>
         .stApp {
-            background-image: url("https://images.unsplash.com/photo-1515879218367-8466d910aaa4?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80");
+            background-image: url("https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=1920&q=80");
             background-size: cover;
             background-attachment: fixed;
         }
         .stChatMessage {
-            background-color: rgba(255, 255, 255, 0.9); /* Transparent white for readability */
-            border-radius: 15px;
-            padding: 10px;
-            margin: 5px 0;
+            background-color: rgba(255, 255, 255, 0.92);
+            border-radius: 12px;
+            border: 1px solid #ddd;
         }
-        h1 {
-            color: #FFFFFF;
-            text-shadow: 2px 2px 4px #000000;
+        [data-testid="stSidebar"] {
+            background-color: rgba(0, 35, 73, 0.95); /* SMU Deep Blue */
+            color: white;
+        }
+        .stMetric {
+            color: #ffffff !important;
         }
         </style>
         """,
@@ -60,52 +66,76 @@ def add_custom_style():
 
 add_custom_style()
 
-# --- SIDEBAR CONTENT ---
+# --- 4. SIDEBAR & COST TRACKING ---
+if "total_cost" not in st.session_state:
+    st.session_state.total_cost = 0.0
+
 with st.sidebar:
-    # Adding a course-related image in the sidebar
-    st.image("https://images.unsplash.com/photo-1504639725590-34d0984388bd?auto=format&fit=crop&w=400&q=80", 
-             caption="IS115: Thinking Computationally")
+    st.title("MaiLab Portal")
+    st.image("https://images.unsplash.com/photo-1516116216624-53e697fedbea?auto=format&fit=crop&w=400&q=80")
+    st.info(f"**IS115: Algorithms & Programming**\n\nSections G1, G2, G3, G4 [cite: 403]")
     
-    st.header("Section G1-G4 Portal")
-    st.info("Welcome to the MaiLab AI Assistant. Focus: Design, Complexity, and Efficiency.") [cite: 184, 185, 186]
+    st.metric("Session Cost (USD)", f"${st.session_state.total_cost:.5f}")
     
-    # Existing TA and Versioning Info...
-    st.write(f"Instructor: Prof. Mai Anh Tien") [cite: 403]
+    st.markdown("---")
+    st.write(f"**Instructor:** Prof. Mai Anh Tien [cite: 403]")
+    st.write(f"**Version:** {VERSION_ID}")
     
-# 3. Chat Logic
+    if st.button("Clear Conversation"):
+        st.session_state.messages = []
+        st.session_state.total_cost = 0.0
+        st.rerun()
+
+# --- 5. CHAT INTERFACE ---
+st.title("🤖 IS115 AI Teaching Assistant")
+st.warning("🚀 **BETA VERSION**: Any technical issues, contact Prof. Mai Anh Tien (@Tienmai).")
+
+# Initialize chat history
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
+# Display previous messages
 for msg in st.session_state.messages:
     with st.chat_message(msg["role"]):
         st.markdown(msg["content"])
-try:
-    # Attempt to send the message
-    response = chat.send_message(prompt, stream=True)
-except Exception as e:
-    if "429" in str(e):
-        st.warning("Too many requests! Waiting 10 seconds to retry...")
-        time.sleep(10)  # Wait before retrying
-        response = chat.send_message(prompt, stream=True)
-        
-if prompt := st.chat_input("Ask course admin or course materials..."):
+
+# User prompt
+if prompt := st.chat_input("Ask about recursion, complexity, or course admin..."):
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user"):
         st.markdown(prompt)
 
+    # Response generation
     with st.chat_message("assistant"):
-        # Format history: convert 'assistant' to 'model' for the API
-        history = [{"role": "model" if m["role"] == "assistant" else "user", 
-                    "parts": [m["content"]]} for m in st.session_state.messages[:-1]]
-        
-        chat = model.start_chat(history=history)
-        response = chat.send_message(prompt, stream=True)
-        
-        full_res = ""
-        holder = st.empty()
-        for chunk in response:
-            full_res += chunk.text
-            holder.markdown(full_res + "▌")
-        holder.markdown(full_res)
-        
-    st.session_state.messages.append({"role": "assistant", "content": full_res})
+        try:
+            # Format history (alternating user/model)
+            formatted_history = []
+            for m in st.session_state.messages[:-1]:
+                role = "model" if m["role"] == "assistant" else "user"
+                formatted_history.append({"role": role, "parts": [m["content"]]})
+            
+            chat = model.start_chat(history=formatted_history)
+            
+            # Request response with metadata tracking
+            response = chat.send_message(prompt)
+            
+            # --- COST CALCULATION ---
+            input_tokens = response.usage_metadata.prompt_token_count
+            output_tokens = response.usage_metadata.candidates_token_count
+            
+            turn_cost = (input_tokens * (COST_PER_1M_INPUT / 1_000_000)) + \
+                        (output_tokens * (COST_PER_1M_OUTPUT / 1_000_000))
+            
+            st.session_state.total_cost += turn_cost
+            
+            # Display response
+            st.markdown(response.text)
+            st.caption(f"Used {input_tokens + output_tokens} tokens | Turn Cost: ${turn_cost:.5f}")
+            
+            st.session_state.messages.append({"role": "assistant", "content": response.text})
+
+        except Exception as e:
+            if "429" in str(e):
+                st.error("Rate limit reached. Please wait a moment.")
+            else:
+                st.error(f"Error: {str(e)}")
