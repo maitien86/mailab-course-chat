@@ -163,7 +163,12 @@ with st.sidebar:
     # Progress Tracker
     st.subheader(f"📅 Week {current_week} of 13")
     st.progress(progress_val / 100)
-    
+
+    if vector_db:
+        st.success("📚 Knowledge Base: Active")
+    else:
+        st.info("ℹ️ No PDFs found in /data folder")
+        
     st.markdown("---")
     st.metric("Total Questions Asked", st.session_state.request_count)
     st.write(f"Syllabus Version: {VERSION_ID}")
