@@ -38,13 +38,14 @@ st.caption(f"🚀 Beta Version for Sections G1, G2, G3, G4 | {VERSION_ID}")
 st.warning("⚠️ This is a beta version. If you encounter errors, please contact **Prof. Mai Anh Tien** (@Tienmai) or your section TA.")
 
 with st.sidebar:
-  st.header("Support & Feedback")
+st.header("Support & Feedback")
     st.markdown(f"""
     **Instructor:** Prof. Mai Anh Tien 
     - **Email:** atmai@smu.edu.sg 
     - **Telegram:** [@Tienmai](https://t.me/Tienmai) 
     """)
-    if st.button("Clear Chat"):
+    
+    if st.button("Clear Chat History"):
         st.session_state.messages = []
         st.rerun()
 
