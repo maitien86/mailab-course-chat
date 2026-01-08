@@ -166,6 +166,7 @@ Typical preparation time: **3–4 hours per week**.
 - From Fri of Week 11 to Fri of Week 13
 - Groups of 2 students (3 students if the number of student in the section is odd)
 - there will be 2 or three coding questions, score will evaluated based on solution quality and run time. Students also need to submit reports and recorded video to explain their solutions (more detailed will be provided later)
+**Note**: Mock papers (exam questions from previous-year IS115 classes) will be provided a few weeks before the exams.
 ---
 
 ## 7. Required & Recommended Materials
