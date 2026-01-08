@@ -108,8 +108,8 @@ with st.sidebar:
     st.markdown("---")
     st.subheader("👨‍🏫 Instructor Profile")
     st.markdown("""
-    **Prof. Mai Anh Tien** Assistant Professor of Information Systems  
-    *School of Computing and Information Systems* **Singapore Management University**
+    **Prof. Mai Anh Tien**  
+    *SCIS,* **Singapore Management University**
     
      
     **Email:** [atmai@smu.edu.sg](mailto:atmai@smu.edu.sg)
