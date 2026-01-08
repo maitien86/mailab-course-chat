@@ -31,12 +31,19 @@ model = genai.GenerativeModel(
 
 # 2. UI Layout
 st.set_page_config(page_title="IS115 Course Bot", page_icon="💻")
-st.title("💻 IS115: Algorithms & Programming - Q&A")
-st.caption(f"Sections G1, G2, G3 and G4 (by Prof. Mai Anh Tien) ")
+st.title("💻 IS115: Algorithms & Programming")
+st.caption(f"🚀 Beta Version for Sections G1, G2, G3, G4 | {VERSION_ID}")
+
+# Clear and prominent contact warning
+st.warning("⚠️ This is a beta version. If you encounter errors, please contact **Prof. Mai Anh Tien** (@Tienmai) or your section TA.")
 
 with st.sidebar:
-    st.header("Course Resources")
-    st.info(f"Current Syllabus: {VERSION_ID}")
+  st.header("Support & Feedback")
+    st.markdown(f"""
+    **Instructor:** Prof. Mai Anh Tien 
+    - **Email:** atmai@smu.edu.sg 
+    - **Telegram:** [@Tienmai](https://t.me/Tienmai) 
+    """)
     if st.button("Clear Chat"):
         st.session_state.messages = []
         st.rerun()
