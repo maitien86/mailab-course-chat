@@ -30,7 +30,7 @@ except Exception:
 
 # Helper: Extract text from PDFs in a folder
 def get_pdf_text():
-    text = ""
+    text = "123"
     pdf_folder = "data/" # Place your PDF files (e.g., Week1.pdf) here
     
     # DEBUG: See what's actually there
