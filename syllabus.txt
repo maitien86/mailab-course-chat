@@ -100,7 +100,9 @@ This course adopts a **flipped classroom model** from Week 2 onward. Students ar
 - Watch assigned video lectures before class
 - Complete self-check quizzes before each lesson  
 - Attempt Tier 1 and Tier 2 questions (provided in the previous week’s class).
+- Tier 1 answers are provided together with the questions. Students should attempt the questions first and may watch the video solutions before class.
 - Attempting Tier 3 questions will earn bonus class participation points.
+- During class, students and the instructor (Prof. Tien) will go through all Tier 2 questions. Students may upload their Tier 2 answers via the Padlet link to receive class participation points.
 - Using genAI is allowed, but keep in mind that we have closed-book midterm and final exams
 
 Typical preparation time: **3–4 hours per week**.
@@ -155,6 +157,7 @@ Typical preparation time: **3–4 hours per week**.
 - Rough paper will be provided by invigilators (no need to bring your own).
 - Bring non-programmable calculator  
 - Scope: content up to Week 5 (Stacks/Queues)  
+- If you are unable to attend the midterm for a valid reason, you may take the final exam with the midterm weight transferred to the final. Please note that the final exam is typically more difficult.
 
 ### Final Exam (40%)
 - Covers all course topics  
