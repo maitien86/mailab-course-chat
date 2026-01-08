@@ -1,3 +1,8 @@
-streamlit
 google-generativeai
-pip install PyPDF2 langchain langchain-community langchain-google-genai faiss-cpu
+streamlit
+PyPDF2
+langchain
+langchain-community
+langchain-google-genai
+faiss-cpu
+pypdf
