@@ -7,12 +7,12 @@ MODEL_NAME = "gemini-2.5-flash-lite"
 # --- 2. CONFIGURATION & SYLLABUS LOADING ---
 st.set_page_config(page_title="IS115 Assistant", page_icon="🎓", layout="wide")
 
-# Securely fetch API Key
+# Securely fetch API Key from Streamlit Secrets
 try:
     API_KEY = st.secrets["GEMINI_API_KEY"]
     genai.configure(api_key=API_KEY)
 except Exception:
-    st.error("Missing GEMINI_API_KEY in Streamlit Secrets.")
+    st.error("Missing GEMINI_API_KEY. Please add it to Streamlit Secrets.")
     st.stop()
 
 # Load syllabus.txt and version ID
@@ -33,14 +33,14 @@ model = genai.GenerativeModel(
     system_instruction=SYLLABUS_CONTENT
 )
 
-# --- 3. UI STYLING (SMU THEME & DARK TEXT) ---
+# --- 3. UI STYLING (FIXING WHITE-ON-WHITE ISSUE) ---
 def add_custom_style():
     st.markdown(
         """
         <style>
-        /* Main App Background */
+        /* Main App Background - Light Grey */
         .stApp {
-            background-color: #F0F2F6;
+            background-color: #F3F4F6;
         }
         
         /* Sidebar Styling (SMU Deep Blue) */
@@ -49,25 +49,23 @@ def add_custom_style():
             color: white;
         }
 
-        /* Chat Bubbles Styling */
+        /* Chat Bubbles Styling - White with Grey Border */
         [data-testid="stChatMessage"] {
-            background-color: #FFFFFF;
+            background-color: #FFFFFF !important;
             border: 1px solid #D1D5DB;
             border-radius: 12px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
         }
 
-        /* Force Dark Text for Readability */
+        /* CRITICAL FIX: Force Dark Charcoal Text color */
         [data-testid="stChatMessageContent"] p {
-            color: #111827 !important;
+            color: #1F2937 !important; 
             font-size: 1.05rem;
-            font-weight: 450;
+            font-weight: 400;
         }
 
-        /* Header Text Shadow */
-        .main-header {
-            color: #002349;
-            font-weight: 800;
+        /* Metrics in sidebar color fix */
+        [data-testid="stMetricValue"] {
+            color: white !important;
         }
         </style>
         """,
@@ -84,14 +82,13 @@ if "messages" not in st.session_state:
     st.session_state.messages = []
 
 with st.sidebar:
-    # SMU LOGO - Using official SMU colors/branding
+    # Official SMU Logo
     st.image("https://upload.wikimedia.org/wikipedia/en/thumb/f/f6/Singapore_Management_University_logo.svg/1200px-Singapore_Management_University_logo.svg.png", width=200)
     
     st.markdown("---")
-    st.header("Admin Dashboard")
     st.metric("Total Questions Asked", st.session_state.request_count)
     
-    st.info(f"**Course:** IS115 Algorithms & Programming\n\n**Sections:** G1, G2, G3, G4")
+    st.info(f"**Course:** IS115 Algorithms & Programming\\n\\n**Sections:** G1, G2, G3, G4")
     
     st.markdown("---")
     st.write(f"**Instructor:** Prof. Mai Anh Tien")
@@ -103,16 +100,14 @@ with st.sidebar:
         st.rerun()
 
 # --- 5. CHAT INTERFACE ---
-# Course Branding at the Top
-col1, col2 = st.columns([1, 4])
+col1, col2 = st.columns([1, 5])
 with col1:
-    # Course Logo/Icon
     st.image("https://cdn-icons-png.flaticon.com/512/2103/2103633.png", width=80)
 with col2:
-    st.markdown("<h1 class='main-header'>IS115: Algorithms & Programming</h1>", unsafe_allow_html=True)
-    st.caption("Official AI Teaching Assistant for Sections G1-G4 | Powered by MaiLab")
+    st.markdown("<h1 style='color: #002349;'>IS115: Algorithms & Programming</h1>", unsafe_allow_html=True)
+    st.caption("Official AI Teaching Assistant for Sections G1-G4")
 
-st.warning("🚀 **BETA NOTICE**: If the bot provides incorrect admin info, refer to the official eLearn syllabus or contact Prof. Mai Anh Tien.")
+st.warning("🚀 **BETA NOTICE**: If you encounter issues, please contact Prof. Mai Anh Tien (@Tienmai).")
 
 # Display previous messages
 for msg in st.session_state.messages:
@@ -120,7 +115,7 @@ for msg in st.session_state.messages:
         st.markdown(msg["content"])
 
 # User prompt logic
-if prompt := st.chat_input("Ask a question about algorithms, data structures, or course policies..."):
+if prompt := st.chat_input("Ask a question about the course..."):
     st.session_state.request_count += 1
     st.session_state.messages.append({"role": "user", "content": prompt})
     
@@ -129,7 +124,7 @@ if prompt := st.chat_input("Ask a question about algorithms, data structures, or
 
     with st.chat_message("assistant"):
         try:
-            # Format history for Gemini
+            # Format history for Gemini API
             formatted_history = []
             for m in st.session_state.messages[:-1]:
                 role = "model" if m["role"] == "assistant" else "user"
