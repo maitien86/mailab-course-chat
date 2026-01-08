@@ -103,6 +103,7 @@ This course adopts a **flipped classroom model** from Week 2 onward. Students ar
 - Tier 1 answers are provided together with the questions. Students should attempt the questions first and may watch the video solutions before class.
 - Attempting Tier 3 questions will earn bonus class participation points.
 - During class, students and the instructor (Prof. Tien) will go through all Tier 2 questions. Students may upload their Tier 2 answers via the Padlet link to receive class participation points.
+- There are no deadlines for Tier-3 questions. You can submit them anytime before Week 13 to earn class part points
 - Using genAI is allowed, but keep in mind that we have closed-book midterm and final exams
 
 Typical preparation time: **3–4 hours per week**.
