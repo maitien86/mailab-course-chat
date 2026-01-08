@@ -44,6 +44,16 @@ Section | Day | Time          | Venue                       | Instructor        
 | G6      | Mon | 12:00–3:15 PM  | SOE/SCIS2 Seminar Room 5-2  | Mok Heng Ngee      |
 | G7      | Fri | 12:00–3:15 PM  | SOE/SCIS2 Seminar Room 2-1  | Zhang Zhiyuan      |
 
+### Other instructors
+- Mok Heng Ngee
+  email: hnmok@smu.edu.sg
+  Telegram:  @Mokkie
+- Zhang Zhiyuan  
+  Email: zhiyuanzhang@smu.edu.sg
+  Telegram: @zhiyuanzhang
+- Ivan
+  Email: ivantan@smu.edu.sg
+  Telegram: @ivantanwh
 
 ### Telegram Groups
 G1: https://t.me/+cgOOlFBUQ8gwMmU1  
