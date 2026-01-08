@@ -30,25 +30,48 @@ model = genai.GenerativeModel(
 )
 
 # 2. UI Layout
-st.set_page_config(page_title="IS115 Course Bot", page_icon="💻")
-st.title("💻 IS115: Algorithms & Programming")
-st.caption(f"🚀 Beta Version for Sections G1, G2, G3, G4 | {VERSION_ID}")
+# --- UI CONFIGURATION ---
+st.set_page_config(page_title="IS115 Assistant", page_icon="💻", layout="wide")
 
-# Clear and prominent contact warning
-st.warning("⚠️ This is a beta version. If you encounter errors, please contact **Prof. Mai Anh Tien** (@Tienmai) or your section TA.")
+# Custom CSS for a professional background and styling
+def add_custom_style():
+    st.markdown(
+        """
+        <style>
+        .stApp {
+            background-image: url("https://images.unsplash.com/photo-1515879218367-8466d910aaa4?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80");
+            background-size: cover;
+            background-attachment: fixed;
+        }
+        .stChatMessage {
+            background-color: rgba(255, 255, 255, 0.9); /* Transparent white for readability */
+            border-radius: 15px;
+            padding: 10px;
+            margin: 5px 0;
+        }
+        h1 {
+            color: #FFFFFF;
+            text-shadow: 2px 2px 4px #000000;
+        }
+        </style>
+        """,
+        unsafe_allow_code_with_all_tags=True
+    )
 
+add_custom_style()
+
+# --- SIDEBAR CONTENT ---
 with st.sidebar:
-    st.header("Support & Feedback")
-    st.markdown(f"""
-    **Instructor:** Prof. Mai Anh Tien 
-    - **Email:** atmai@smu.edu.sg 
-    - **Telegram:** [@Tienmai](https://t.me/Tienmai) 
-    """)
+    # Adding a course-related image in the sidebar
+    st.image("https://images.unsplash.com/photo-1504639725590-34d0984388bd?auto=format&fit=crop&w=400&q=80", 
+             caption="IS115: Thinking Computationally")
     
-    if st.button("Clear Chat History"):
-        st.session_state.messages = []
-        st.rerun()
-
+    st.header("Section G1-G4 Portal")
+    st.info("Welcome to the MaiLab AI Assistant. Focus: Design, Complexity, and Efficiency.") [cite: 184, 185, 186]
+    
+    # Existing TA and Versioning Info...
+    st.write(f"Instructor: Prof. Mai Anh Tien") [cite: 403]
+    
 # 3. Chat Logic
 if "messages" not in st.session_state:
     st.session_state.messages = []
