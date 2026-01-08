@@ -222,7 +222,7 @@ with col2:
     st.markdown("<h1 class='main-header'>IS115: Algorithms & Programming</h1>", unsafe_allow_html=True)
 
 # Beta Version Notice
-st.info("🚀 **BETA VERSION:** This is an experimental AI Teaching Assistant. If you encounter any issues, please contact Prof. Mai Anh Tien or your section TA.")
+st.info("🚀 **BETA VERSION:** This is an experimental AI Teaching Assistant for IS115 (Sections G1-G4). If you encounter any issues, please contact Prof. Mai Anh Tien or your section TA.")
 
 # Display History
 for msg in st.session_state.messages:
@@ -230,7 +230,7 @@ for msg in st.session_state.messages:
         st.markdown(msg["content"])
 
 # Chat Logic
-if prompt := st.chat_input("Ask a question about algorithms..."):
+if prompt := st.chat_input("Ask a question about course admin and beyond..."):
     st.session_state.request_count += 1
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user"):
