@@ -198,12 +198,12 @@ with st.sidebar:
     st.subheader(f"📅 Week {current_week} of 13")
     st.progress(progress_val / 100)
 
-    combined_text = get_github_pdf_text()
-    vector_db = process_text_to_vectors(combined_text)
-    if vector_db:
-        st.success("📚 Knowledge Base: Active")
-    else:
-        st.info("ℹ️ No PDFs found in /data folder")
+   # combined_text = get_github_pdf_text()
+   # vector_db = process_text_to_vectors(combined_text)
+   # if vector_db:
+   #     st.success("📚 Knowledge Base: Active")
+   # else:
+   #     st.info("ℹ️ No PDFs found in /data folder")
         
     st.markdown("---")
     st.metric("Total Questions Asked", st.session_state.request_count)
