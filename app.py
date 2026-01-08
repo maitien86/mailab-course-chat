@@ -1,6 +1,5 @@
 import streamlit as st
 import google.generativeai as genai
-import time
 
 # --- 1. SETTINGS & PRICING (2026 PAID TIER) ---
 COST_PER_1M_INPUT = 0.10  # USD
@@ -10,7 +9,7 @@ MODEL_NAME = "gemini-2.5-flash-lite" #
 # --- 2. CONFIGURATION & SYLLABUS LOADING ---
 st.set_page_config(page_title="IS115 Assistant", page_icon="💻", layout="wide")
 
-# Securely fetch API Key
+# Securely fetch API Key from Streamlit Secrets
 try:
     API_KEY = st.secrets["GEMINI_API_KEY"]
     genai.configure(api_key=API_KEY)
@@ -31,7 +30,7 @@ def load_syllabus():
 
 SYLLABUS_CONTENT, VERSION_ID = load_syllabus()
 
-# Initialize Model
+# Initialize Model with Master Syllabus
 model = genai.GenerativeModel(
     model_name=MODEL_NAME,
     system_instruction=SYLLABUS_CONTENT
@@ -66,19 +65,22 @@ def add_custom_style():
 
 add_custom_style()
 
-# --- 4. SIDEBAR & COST TRACKING ---
+# --- 4. SIDEBAR & SESSION STATE ---
 if "total_cost" not in st.session_state:
     st.session_state.total_cost = 0.0
+
+if "messages" not in st.session_state:
+    st.session_state.messages = []
 
 with st.sidebar:
     st.title("MaiLab Portal")
     st.image("https://images.unsplash.com/photo-1516116216624-53e697fedbea?auto=format&fit=crop&w=400&q=80")
-    st.info(f"**IS115: Algorithms & Programming**\n\nSections G1, G2, G3, G4 [cite: 403]")
+    st.info(f"**IS115: Algorithms & Programming**\n\nSections G1, G2, G3, G4") [cite: 7, 25, 403]
     
     st.metric("Session Cost (USD)", f"${st.session_state.total_cost:.5f}")
     
     st.markdown("---")
-    st.write(f"**Instructor:** Prof. Mai Anh Tien [cite: 403]")
+    st.write(f"**Instructor:** Prof. Mai Anh Tien") [cite: 40, 403]
     st.write(f"**Version:** {VERSION_ID}")
     
     if st.button("Clear Conversation"):
@@ -88,19 +90,16 @@ with st.sidebar:
 
 # --- 5. CHAT INTERFACE ---
 st.title("🤖 IS115 AI Teaching Assistant")
-st.warning("🚀 **BETA VERSION**: Any technical issues, contact Prof. Mai Anh Tien (@Tienmai).")
-
-# Initialize chat history
-if "messages" not in st.session_state:
-    st.session_state.messages = []
+st.warning("🚀 **BETA VERSION**: Any technical issues, contact Prof. Mai Anh Tien (@Tienmai).") [cite: 40, 403]
 
 # Display previous messages
 for msg in st.session_state.messages:
     with st.chat_message(msg["role"]):
         st.markdown(msg["content"])
 
-# User prompt
-if prompt := st.chat_input("Ask about recursion, complexity, or course admin..."):
+# User prompt logic
+if prompt := st.chat_input("Ask about recursion, complexity, or course admin..."): [cite: 14, 17]
+    # Add user message to history
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user"):
         st.markdown(prompt)
@@ -108,18 +107,23 @@ if prompt := st.chat_input("Ask about recursion, complexity, or course admin..."
     # Response generation
     with st.chat_message("assistant"):
         try:
-            # Format history (alternating user/model)
+            # FIX: Properly format history for the Gemini API
             formatted_history = []
             for m in st.session_state.messages[:-1]:
                 role = "model" if m["role"] == "assistant" else "user"
                 formatted_history.append({"role": role, "parts": [m["content"]]})
             
+            # Start the chat session
             chat = model.start_chat(history=formatted_history)
             
-            # Request response with metadata tracking
+            # Send message without streaming to avoid 'object is not iterable' TypeError
             response = chat.send_message(prompt)
             
+            # Extract content
+            full_res = response.text
+            
             # --- COST CALCULATION ---
+            # Correctly access usage_metadata for token counts
             input_tokens = response.usage_metadata.prompt_token_count
             output_tokens = response.usage_metadata.candidates_token_count
             
@@ -128,14 +132,15 @@ if prompt := st.chat_input("Ask about recursion, complexity, or course admin..."
             
             st.session_state.total_cost += turn_cost
             
-            # Display response
-            st.markdown(response.text)
+            # Display response text
+            st.markdown(full_res)
             st.caption(f"Used {input_tokens + output_tokens} tokens | Turn Cost: ${turn_cost:.5f}")
             
-            st.session_state.messages.append({"role": "assistant", "content": response.text})
+            # Save assistant response to history
+            st.session_state.messages.append({"role": "assistant", "content": full_res})
 
         except Exception as e:
             if "429" in str(e):
                 st.error("Rate limit reached. Please wait a moment.")
             else:
-                st.error(f"Error: {str(e)}")
+                st.error(f"Error processing response: {str(e)}")
