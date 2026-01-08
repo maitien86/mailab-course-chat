@@ -62,9 +62,12 @@ vector_db = create_vector_store()
 def load_syllabus():
     try:
         with open("syllabus.txt", "r", encoding="utf-8") as f:
-            return f.read()
-    except: return "Assistant for IS115."
-
+            content = f.read()
+            version = content.split('\n')[0].replace('###', '').strip()
+            return content, version
+    except FileNotFoundError:
+        return "You are an assistant for IS115.", "v0.0"
+        
 SYLLABUS, VERSION_ID = load_syllabus()
 model = genai.GenerativeModel(model_name=MODEL_NAME, system_instruction=SYLLABUS)
 
