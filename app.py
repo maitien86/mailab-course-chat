@@ -25,7 +25,7 @@ Guidelines:
 
 # 3. Initialize the Gemini Model
 model = genai.GenerativeModel(
-    model_name="gemini-1.5-flash", # Use Flash for speed and higher free limits
+    model_name="gemini-2.5-flash", # Use Flash for speed and higher free limits
     system_instruction=SYSTEM_PROMPT
 )
 
