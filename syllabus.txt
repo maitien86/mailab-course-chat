@@ -255,3 +255,10 @@ There are 5 labs (coding exercises) for students to attempt. Following are links
 - Each lab is hosted on **HackerRank** via the links above.  
 - Deadlines are consistently on **Friday** of the stated week.  
 
+## 12. Padlet links (for collecting students's answers during classes)
+Each section will be assigned a Padlet link through which students can submit their responses to practical questions discussed during class.
+
+G1: https://padlet.com/atmai/is115-g1-d26ql3tqjglnlb24
+G2: https://padlet.com/atmai/is115-g2-vl89qwo8wyuu39jl
+G3: https://padlet.com/atmai/is115-g3-x6wd56kutu37aiqt
+G4: https://padlet.com/atmai/is115-g4-7amni0e6p5c2xn82
