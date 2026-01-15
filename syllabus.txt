@@ -262,3 +262,22 @@ G1: https://padlet.com/atmai/is115-g1-d26ql3tqjglnlb24
 G2: https://padlet.com/atmai/is115-g2-vl89qwo8wyuu39jl
 G3: https://padlet.com/atmai/is115-g3-x6wd56kutu37aiqt
 G4: https://padlet.com/atmai/is115-g4-7amni0e6p5c2xn82
+
+## 13. Links to lecture genAI-generated slides 
+
+Below are the links to the weekly slides, generateted by genAI, from Week 1 to Week 13
+
+| File Name        | Link |
+|------------------|------|
+| W1-slides.pdf  | [Link](https://drive.google.com/file/d/14eJcn3EXXzm6fL2EoqVPtI95KSyIylun/view?usp=drive_web) |
+| W2-slides.pdf  | [Link](https://drive.google.com/file/d/1xGObPtoHkiMBoJHJxOCdqz7adRuOIX6N/view?usp=drive_web) |
+| W3-slides.pdf  | [Link](https://drive.google.com/file/d/1kxw7liXn6Ri8zSI_oZQEgw3R9iF38J0u/view?usp=drive_web) |
+| W4-slides.pdf  | [Link](https://drive.google.com/file/d/1hK8uJddLoe9che5CyoWYIYihL0qBOxVg/view?usp=drive_web) |
+| W5-slides.pdf  | [Link](https://drive.google.com/file/d/1aYaIknNJb7vZKWFKMj-uBKO0RYpLsrE-/view?usp=drive_web) |
+| W6-slides.pdf  | [Link](https://drive.google.com/file/d/1mE88tvwhm1HQ_zhPXmyl4ssVf0rnmZnf/view?usp=drive_web) |
+| W7-slides.pdf  | [Link](https://drive.google.com/file/d/1nNwT9cMSHSHP7cQ_VKB_TQw3W0bn9MA8/view?usp=drive_web) |
+| W9-slides.pdf  | [Link](https://drive.google.com/file/d/1iyaEBWwdsvPN57ctkVifSlK44RRc_FwF/view?usp=drive_web) |
+| W10-slides.pdf | [Link](https://drive.google.com/file/d/188t_UgOomw7zvqDmwBa_nTvdZAKAmXAe/view?usp=drive_web) |
+| W11-slides.pdf | [Link](https://drive.google.com/file/d/1unZn8l6ZxxSILe-Kedp7WjLxmT-AqpL6/view?usp=drive_web) |
+| W13-slides.pdf | [Link](https://drive.google.com/file/d/1jmGAjhApEN52Lbz9BeLR3klq72krkcEU/view?usp=drive_web) |
+
