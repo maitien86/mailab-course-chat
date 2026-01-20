@@ -171,6 +171,21 @@ Typical preparation time: **3–4 hours per week**.
 - Scope: content up to Week 5 (Stacks/Queues)  
 - If you are unable to attend the midterm for a valid reason, you may take the final exam with the midterm weight transferred to the final. Please note that the final exam is typically more difficult.
 
+### Midterm venues
+Following are the venues for midterm exam
+
+| Section        | Room                |
+|----------------|---------------------|
+| G1 (Tien)      | SCIS2/SOE SR 2.6     |
+| G2 (Tien)      | SCIS2/SOE SR 2.7     |
+| G3 (Tien)      | SCIS2/SOE SR 2.8     |
+| G4 (Tien)      | SCIS2/SOE SR 2.9     |
+| G5 (Mok)       | SCIS2/SOE SR 2.4     |
+| G6 (Mok)       | SCIS2/SOE SR 2.5     |
+| G7 (Zhiyuan)   | SCIS2/SOE SR 3.6     |
+| Spare room     | SCIS2/SOE SR 3.7     |
+​
+
 ### Final Exam (40%)
 - Covers all course topics  
 - There might be questions covering group-project's questions
