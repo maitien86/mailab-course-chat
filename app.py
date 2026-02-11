@@ -30,24 +30,28 @@ except Exception:
 
 # Helper: Extract text from PDFs in a folder
 def get_pdf_text():
-    text = "123"
-    pdf_folder = "data/" # Place your PDF files (e.g., Week1.pdf) here
+    text = "" # Start empty
+    pdf_folder = "data/" 
     
-    # DEBUG: See what's actually there
-    if os.path.exists(pdf_folder):
-        all_files = os.listdir(pdf_folder)
-        st.sidebar.write(f"Files found: {all_files}")
-    else:
-        st.sidebar.error("CRITICAL: The folder '/data' does not exist at the root!")
+    if not os.path.exists(pdf_folder):
+        st.sidebar.error(f"Folder '{pdf_folder}' not found.")
         return ""
         
-    if not os.path.exists(pdf_folder):
+    files = [f for f in os.listdir(pdf_folder) if f.endswith(".pdf")]
+    if not files:
+        st.sidebar.info("No PDF files found in /data.")
         return ""
-    for filename in os.listdir(pdf_folder):
-        if filename.endswith(".pdf"):
+
+    for filename in files:
+        try:
             pdf_reader = PdfReader(os.path.join(pdf_folder, filename))
             for page in pdf_reader.pages:
-                text += page.extract_text()
+                extracted = page.extract_text()
+                if extracted:
+                    text += extracted
+        except Exception as e:
+            st.sidebar.error(f"Error reading {filename}: {e}")
+            
     return text
 
 # --- 3. RAG CORE LOGIC ---
@@ -79,15 +83,31 @@ def get_github_pdf_text():
 @st.cache_resource
 def create_vector_store():
     raw_text = get_pdf_text()
-    if not raw_text:
+    
+    # 1. Check if we actually got text (avoiding the "123" default)
+    if not raw_text or len(raw_text) < 10:
+        st.sidebar.warning("⚠️ No text extracted from PDFs.")
         return None
+    
+    # 2. Clean the text (remove characters that break the Google API)
+    raw_text = raw_text.encode("utf-8", "ignore").decode("utf-8")
     
     text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=100)
     chunks = text_splitter.split_text(raw_text)
     
-    embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001", google_api_key=API_KEY)
-    vector_store = FAISS.from_texts(chunks, embedding=embeddings)
-    return vector_store
+    try:
+        embeddings = GoogleGenerativeAIEmbeddings(
+            model="models/embedding-001", 
+            google_api_key=API_KEY
+        )
+        
+        # 3. Use FAISS with a safety check
+        vector_store = FAISS.from_texts(chunks, embedding=embeddings)
+        return vector_store
+    except Exception as e:
+        # This will show the "Redacted" error's true face in your UI for debugging
+        st.error(f"❌ Embedding Error: {str(e)}")
+        return None
 
 # Initialize RAG
 vector_db = create_vector_store()
