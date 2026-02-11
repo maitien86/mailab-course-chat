@@ -104,7 +104,7 @@ def create_vector_store():
     
     try:
         embeddings = GoogleGenerativeAIEmbeddings(
-            model="models/embedding-001", 
+            model="models/embedding-004", 
             google_api_key=API_KEY
         )
         
