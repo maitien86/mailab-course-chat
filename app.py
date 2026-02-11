@@ -63,7 +63,7 @@ def process_text_to_vectors(raw_text):
         chunks = text_splitter.split_text(raw_text)
         # Add this inside create_vector_store to debug faster
         try:
-            embeddings = GoogleGenerativeAIEmbeddings(model="models/text-embedding-004", google_api_key=API_KEY)
+            embeddings = GoogleGenerativeAIEmbeddings(model="models/gemini-embedding-001", google_api_key=API_KEY)
             # Test a tiny string first
             embeddings.embed_query("test") 
         except Exception as e:
@@ -104,7 +104,7 @@ def create_vector_store():
     
     try:
         embeddings = GoogleGenerativeAIEmbeddings(
-            model="models/embedding-004", 
+            model="models/gemini-embedding-001", 
             google_api_key=API_KEY
         )
         
