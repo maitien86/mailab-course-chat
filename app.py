@@ -61,7 +61,8 @@ def process_text_to_vectors(raw_text):
     try:
         text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=100)
         chunks = text_splitter.split_text(raw_text)
-        embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001", google_api_key=API_KEY)
+        # 'text-embedding-004' is the current standard for 2026
+        embeddings = GoogleGenerativeAIEmbeddings(model="models/text-embedding-004", google_api_key=API_KEY)
         return FAISS.from_texts(chunks, embedding=embeddings)
     except Exception as e:
         st.error(f"Vector Error: {e}")
